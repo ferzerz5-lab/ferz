@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FERZ — Web3 Builder & Content Partner</title>
+<meta name="description" content="Ferz — Web3 builder and content partner. Dashboards, agents, and dApps shipped as proof, plus the content that actually explains them.">
+<link rel="icon" href="assets/pfp.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   FERZ.SITE — STYLES
+   Signature motif: notched/cut-corner panels ("exoskeleton"
+   paneling) used consistently on cards, frames, and tabs.
+   ============================================================ */
+
+:root{
+  --bg: #060810;
+  --bg-alt: #0b0f1c;
+  --surface: #101828;
+  --surface-2: #141d30;
+  --border: #22304a;
+  --border-soft: #17213a;
+  --text: #eef2f8;
+  --text-dim: #a3adc2;
+  --text-faint: #6b768c;
+  --accent: #4f8fef;
+  --accent-2: #7fb2ff;
+  --accent-deep: #13224a;
+  --live: #39d98a;
+  --archived: #7d8aa3;
+  --notch: 18px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+button{ font-family:inherit; cursor:pointer; }
+::selection{ background:var(--accent); color:#04060c; }
+:focus-visible{ outline:2px solid var(--accent-2); outline-offset:3px; }
+
+.wrap{ max-width:1160px; margin:0 auto; padding:0 24px; }
+
+/* ---------- notched panel motif (the signature shape) ---------- */
+.notched{
+  clip-path: polygon(
+    var(--notch) 0, 100% 0,
+    100% calc(100% - var(--notch)), calc(100% - var(--notch)) 100%,
+    0 100%, 0 var(--notch)
+  );
+}
+.notched-sm{
+  --notch: 12px;
+}
+
+/* ---------- background texture ---------- */
+.grid-glow{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 900px 560px at 10% -10%, rgba(79,143,239,0.14), transparent 60%),
+    radial-gradient(ellipse 700px 460px at 100% 15%, rgba(79,143,239,0.09), transparent 60%),
+    var(--bg);
+}
+.grid-glow::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(to bottom, black, transparent 75%);
+}
+
+/* ---------- diagonal section divider ---------- */
+.divider{
+  position:relative;
+  height:1px;
+  max-width:1160px;
+  margin:0 auto;
+  background:linear-gradient(90deg, transparent, var(--border-soft) 12%, var(--border-soft) 88%, transparent);
+  transform:skewY(-0.6deg);
+}
+.divider::before{
+  content:"";
+  position:absolute;
+  left:50%; top:50%;
+  width:8px; height:8px;
+  background:var(--accent);
+  opacity:0.65;
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+
+/* ---------- nav ---------- */
+header.nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(6,8,16,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border-soft);
+}
+.nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 24px; max-width:1160px; margin:0 auto;
+}
+.nav-brand{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font-display); font-weight:700; font-size:1.05rem; letter-spacing:0.02em;
+}
+.nav-brand img{ width:30px; height:30px; border:1px solid var(--border); }
+.nav-brand img.notched{ --notch:6px; }
+.nav-links{ display:none; gap:22px; font-family:var(--font-mono); font-size:0.78rem; color:var(--text-dim); }
+.nav-links a:hover{ color:var(--accent-2); }
+@media(min-width:720px){ .nav-links{ display:flex; } }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; z-index:1; padding:76px 0 0; overflow:visible; }
+.hero-grid{
+  display:grid; grid-template-columns:1fr; gap:40px; align-items:center;
+}
+@media(min-width:860px){ .hero-grid{ grid-template-columns:1.15fr 0.85fr; gap:24px; } }
+
+.eyebrow{
+  font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--accent-2); display:flex; align-items:center; gap:9px; margin-bottom:18px;
+}
+.eyebrow .dot{
+  width:8px; height:8px; background:var(--live); border-radius:2px; transform:rotate(45deg);
+  box-shadow:0 0 0 3px rgba(57,217,138,0.16); animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
+
+h1.hero-name{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(2.8rem, 8vw, 4.6rem); line-height:0.98; letter-spacing:-0.01em;
+}
+h1.hero-name span{ color:var(--accent-2); }
+.hero-role{
+  font-family:var(--font-display); font-weight:500;
+  font-size:clamp(1.1rem, 2.4vw, 1.4rem); color:var(--text-dim); margin-top:14px;
+}
+.hero-desc{ margin-top:20px; max-width:54ch; color:var(--text-dim); font-size:1rem; }
+.hero-pills{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+.pill{
+  font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.04em;
+  padding:7px 12px; border:1px solid var(--border); color:var(--text-dim); background:rgba(255,255,255,0.02);
+}
+.hero-ctas{ display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
+.btn{
+  font-family:var(--font-mono); font-size:0.82rem; padding:12px 22px;
+  border:1px solid var(--border); display:inline-flex; align-items:center; gap:8px;
+  transition:border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.btn-primary{ background:var(--accent); color:#04060c; border-color:var(--accent); font-weight:600; }
+.btn-primary:hover{ transform:translateY(-2px); background:var(--accent-2); }
+.btn-ghost:hover{ border-color:var(--accent); color:var(--accent-2); transform:translateY(-2px); }
+
+/* hero portrait cluster: main frame + rotated character bleeding behind it */
+.hero-portrait{
+  position:relative;
+  justify-self:center;
+  width:min(380px, 82vw);
+  aspect-ratio:1/1;
+}
+.hero-bleed{
+  position:absolute;
+  width:62%;
+  aspect-ratio:3/4;
+  top:-8%;
+  right:-14%;
+  transform:rotate(9deg);
+  opacity:0.9;
+  filter:saturate(0.9);
+  z-index:1;
+  border:1px solid var(--border-soft);
+}
+.hero-bleed img{ width:100%; height:100%; object-fit:cover; }
+.portrait-frame{
+  position:absolute;
+  inset:8% 14% 8% 0;
+  overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 0 0 1px rgba(79,143,239,0.08), 0 30px 60px -20px rgba(79,143,239,0.28);
+  z-index:2;
+  background:var(--surface);
+}
+.portrait-frame img{ width:100%; height:100%; object-fit:cover; }
+.portrait-diamond{
+  position:absolute;
+  bottom:-14px; left:8%;
+  width:26px; height:26px;
+  background:var(--accent);
+  transform:rotate(45deg);
+  z-index:3;
+  box-shadow:0 0 24px rgba(79,143,239,0.5);
+}
+.portrait-tag{
+  position:absolute;
+  bottom:16px; left:calc(8% + 24px);
+  font-family:var(--font-mono); font-size:0.66rem;
+  background:rgba(6,8,16,0.75); border:1px solid var(--border); color:var(--accent-2);
+  padding:5px 9px; backdrop-filter:blur(4px); z-index:3;
+}
+@media(max-width:600px){ .hero-bleed{ display:none; } }
+
+/* ---------- ticker ---------- */
+.ticker-wrap{
+  position:relative; z-index:1; margin-top:64px;
+  border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);
+  background:var(--bg-alt); overflow:hidden;
+}
+.ticker-track{ display:flex; width:max-content; animation:scroll 32s linear infinite; }
+.ticker-track:hover{ animation-play-state:paused; }
+@keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.ticker-item{
+  font-family:var(--font-mono); font-size:0.76rem; color:var(--text-dim);
+  padding:12px 28px; white-space:nowrap; border-right:1px solid var(--border-soft);
+  display:flex; align-items:center; gap:8px;
+}
+.ticker-item .tag{ color:var(--accent-2); }
+
+/* ---------- section shell ---------- */
+section{ position:relative; z-index:1; padding:96px 0; overflow:hidden; }
+.section-head{ margin-bottom:48px; max-width:62ch; }
+.section-label{
+  font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--accent-2); margin-bottom:12px; display:flex; align-items:center; gap:8px;
+}
+.section-label::before{
+  content:""; width:7px; height:7px; background:var(--accent-2); transform:rotate(45deg); flex:none;
+}
+.section-title{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.7rem, 4vw, 2.3rem); }
+.section-sub{ margin-top:12px; color:var(--text-dim); }
+
+/* ---------- what i do ---------- */
+.do-section{ position:relative; }
+.do-bleed{
+  position:absolute;
+  width:220px; aspect-ratio:3/4;
+  right:-40px; top:40px;
+  transform:rotate(-7deg);
+  opacity:0.85;
+  z-index:0;
+  border:1px solid var(--border-soft);
+}
+.do-bleed img{ width:100%; height:100%; object-fit:cover; }
+@media(max-width:900px){ .do-bleed{ display:none; } }
+
+.do-list{ position:relative; z-index:1; display:flex; flex-direction:column; gap:1px; max-width:760px; }
+.do-item{
+  display:grid;
+  grid-template-columns:52px 1fr;
+  gap:20px;
+  padding:26px 4px;
+  border-top:1px solid var(--border-soft);
+}
+.do-item:last-child{ border-bottom:1px solid var(--border-soft); }
+.do-num{ font-family:var(--font-mono); font-size:0.78rem; color:var(--accent-2); padding-top:2px; }
+.do-title{ font-family:var(--font-display); font-weight:600; font-size:1.15rem; }
+.do-text{ margin-top:8px; color:var(--text-dim); font-size:0.94rem; max-width:52ch; }
+
+/* ---------- proof of work ---------- */
+.filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:36px; }
+.filter-btn{
+  font-family:var(--font-mono); font-size:0.74rem; padding:9px 16px;
+  border:1px solid var(--border); color:var(--text-dim); background:transparent;
+  transition:all 0.2s ease;
+}
+.filter-btn:hover{ border-color:var(--accent); color:var(--text); }
+.filter-btn.active{ background:var(--accent); border-color:var(--accent); color:#04060c; font-weight:600; }
+
+.work-note{
+  font-family:var(--font-mono); font-size:0.75rem; color:var(--text-faint);
+  margin-top:-30px; margin-bottom:36px;
+}
+
+.project-grid{ position:relative; display:grid; grid-template-columns:1fr; gap:26px; }
+@media(min-width:720px){ .project-grid{ grid-template-columns:repeat(2,1fr); } }
+.project-grid > a:nth-child(even){ margin-top:44px; }
+@media(max-width:719px){ .project-grid > a:nth-child(even){ margin-top:0; } }
+
+.work-accent{
+  position:absolute;
+  width:150px; aspect-ratio:3/4;
+  left:-50px; top:-70px;
+  transform:rotate(6deg);
+  opacity:0.8;
+  z-index:0;
+  border:1px solid var(--border-soft);
+  display:none;
+}
+@media(min-width:1040px){ .work-accent{ display:block; } }
+.work-accent img{ width:100%; height:100%; object-fit:cover; }
+
+.card{
+  position:relative;
+  display:block;
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:border-color 0.25s ease, transform 0.25s ease;
+}
+.card:hover{ border-color:var(--accent); transform:translateY(-4px); }
+
+.card-thumb{
+  position:relative; aspect-ratio:16/10; overflow:hidden;
+  background:linear-gradient(rgba(6,8,16,0) 40%, rgba(6,8,16,0.65)), var(--surface-2);
+  border-bottom:1px solid var(--border-soft);
+}
+.card-thumb img{
+  width:100%; height:100%; object-fit:cover; object-position:top;
+  transition:transform 0.4s ease, filter 0.4s ease; filter:saturate(0.92);
+}
+.card:hover .card-thumb img{ transform:scale(1.045); filter:saturate(1.05); }
+
+.visit-hint{
+  position:absolute; bottom:12px; left:14px;
+  font-family:var(--font-mono); font-size:0.7rem; color:var(--text);
+  display:flex; align-items:center; gap:6px;
+  opacity:0; transform:translateY(4px); transition:opacity 0.25s ease, transform 0.25s ease;
+}
+.card:hover .visit-hint{ opacity:1; transform:translateY(0); }
+
+.stamp{
+  position:absolute; top:14px; right:14px; z-index:2;
+  font-family:var(--font-mono); font-size:0.64rem; letter-spacing:0.08em;
+  padding:4px 9px; border:1px solid currentColor;
+  background:rgba(6,8,16,0.7); backdrop-filter:blur(3px); text-transform:uppercase;
+}
+.stamp.live{ color:var(--live); }
+.stamp.deployed{ color:var(--accent-2); }
+.stamp.archived{ color:var(--archived); }
+
+.card-body{ padding:22px 24px 24px; }
+.card-meta{ font-family:var(--font-mono); font-size:0.7rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; }
+.card-title{ font-family:var(--font-display); font-weight:600; font-size:1.2rem; margin-top:10px; }
+.card-desc{ margin-top:10px; color:var(--text-dim); font-size:0.9rem; }
+.card-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:16px; }
+.tag-chip{ font-family:var(--font-mono); font-size:0.66rem; padding:3px 8px; background:var(--surface-2); color:var(--text-dim); }
+.card-link{ margin-top:18px; display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.78rem; color:var(--accent-2); }
+.card:hover .card-link{ text-decoration:underline; }
+
+.more-row{
+  margin-top:48px;
+  display:flex; align-items:center; gap:14px;
+  font-family:var(--font-mono); font-size:0.82rem; color:var(--text-dim);
+}
+.more-row a{ color:var(--accent-2); }
+.more-row a:hover{ text-decoration:underline; }
+.more-row::before{ content:""; width:7px; height:7px; background:var(--accent-2); transform:rotate(45deg); flex:none; }
+
+/* ---------- connect / footer ---------- */
+.connect{ padding:96px 0 40px; position:relative; }
+.connect-bleed{
+  position:absolute;
+  width:190px; aspect-ratio:3/4;
+  right:-30px; bottom:20px;
+  transform:rotate(5deg);
+  opacity:0.8;
+  z-index:0;
+  border:1px solid var(--border-soft);
+  display:none;
+}
+@media(min-width:900px){ .connect-bleed{ display:block; } }
+.connect-bleed img{ width:100%; height:100%; object-fit:cover; }
+
+.connect-grid{ position:relative; z-index:1; display:grid; grid-template-columns:1fr; gap:12px; }
+@media(min-width:700px){ .connect-grid{ grid-template-columns:repeat(3,1fr); } }
+.social-link{
+  border:1px solid var(--border); padding:18px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--surface); transition:border-color 0.2s ease, transform 0.2s ease;
+}
+.social-link:hover{ border-color:var(--accent); transform:translateY(-2px); }
+.social-name{ font-family:var(--font-display); font-weight:600; font-size:0.98rem; }
+.social-handle{ font-family:var(--font-mono); font-size:0.72rem; color:var(--text-faint); margin-top:3px; }
+.social-arrow{ color:var(--accent-2); font-family:var(--font-mono); }
+
+.footer-accent{
+  position:relative; z-index:1;
+  display:flex; align-items:center; gap:14px;
+  margin-top:40px;
+}
+.footer-thumb{
+  width:44px; height:44px; overflow:hidden; border:1px solid var(--border); flex:none;
+}
+.footer-thumb img{ width:100%; height:100%; object-fit:cover; object-position:top; }
+.footer-line{ font-family:var(--font-mono); font-size:0.76rem; color:var(--text-dim); }
+
+footer{ padding:36px 0 60px; text-align:center; font-family:var(--font-mono); font-size:0.72rem; color:var(--text-faint); }
+footer .foot-name{ color:var(--accent-2); }
+
+</style>
+</head>
+<body>
+
+<div class="grid-glow"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">
+      <img class="notched" src="assets/pfp.jpg" alt="Ferz avatar">
+      FERZ
+    </a>
+    <nav class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#do">What I Do</a>
+      <a href="#connect">Connect</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <h1 class="hero-name">FER<span>Z</span></h1>
+        <div class="hero-role" id="hero-role">Loading…</div>
+        <p class="hero-desc" id="hero-desc">Loading…</p>
+        <div class="hero-pills" id="hero-pills"></div>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#work">See the work →</a>
+          <a class="btn btn-ghost" id="hero-x-link" href="#" target="_blank" rel="noopener">Follow on X</a>
+        </div>
+      </div>
+      <div class="hero-portrait">
+        <div class="hero-bleed"><img src="assets/char-flex.jpg" alt="Ferz character art"></div>
+        <div class="portrait-frame">
+          <img src="assets/pfp.jpg" alt="Ferz avatar">
+        </div>
+        <div class="portrait-diamond"></div>
+        <div class="portrait-tag">FERZ.001</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <section id="do" class="wrap do-section">
+    <div class="do-bleed"><img src="assets/char-paper.jpg" alt="Ferz character art"></div>
+    <div class="section-head">
+      <div class="section-label">What I Do</div>
+      <h2 class="section-title">Two jobs, one output</h2>
+      <p class="section-sub" id="do-sub">Loading…</p>
+    </div>
+    <div class="do-list" id="do-list"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="work" class="wrap">
+    <div class="work-accent"><img src="assets/char-think1.jpg" alt="Ferz character art"></div>
+    <div class="section-head">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title" id="work-title">Loading…</h2>
+      <p class="section-sub" id="work-sub">Loading…</p>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="project-grid" id="project-grid"></div>
+    <div class="more-row">Rest of it's on <a id="more-x" href="#" target="_blank" rel="noopener">X</a> and <a id="more-gh" href="#" target="_blank" rel="noopener">GitHub</a>.</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="connect" class="wrap connect">
+    <div class="connect-bleed"><img src="assets/char-think2.jpg" alt="Ferz character art"></div>
+    <div class="section-head">
+      <div class="section-label">Connect</div>
+      <h2 class="section-title">Talk to me here</h2>
+      <p class="section-sub">X first, everything else works too.</p>
+    </div>
+    <div class="connect-grid" id="connect-grid"></div>
+    <div class="footer-accent">
+      <div class="footer-thumb"><img src="assets/char-peace.jpg" alt="Ferz character art"></div>
+      <div class="footer-line">Always down to talk builds, content, or both.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    © <span id="year"></span> <span class="foot-name">FERZ</span>
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   EDIT ZONE — everything you'll ever need to change lives here.
+   Update this block, save, push to GitHub. Nothing below this
+   zone needs to be touched for normal updates.
+   ================================================================ */
+
+const PROFILE = {
+  role: "DevRel, Builder & Content Partner",
+  description: "I build and I write about what I build. Dashboards, agents, dApps, and the threads and videos that explain them.",
+  pills: ["DevRel", "Content Partner", "Hackathon Builder", "Build-First Outreach"]
+};
+
+const DO_SUB = "I don't just ship code. I ship the write-up, the thread, or the video that comes with it.";
+
+const DO_ITEMS = [
+  { title: "DevRel", text: "Threads, dashboards, and guides that actually walk through a protocol's stack instead of just announcing it exists." },
+  { title: "Hackathon Builds", text: "AI agents, on-chain tools, dashboards. Built end to end, shipped against a real clock." },
+  { title: "Content Partnerships", text: "Paid content work for Web3 infra and DeFi projects — videos, threads, long-form breakdowns, done under my own name." },
+  { title: "Build-First Outreach", text: "I show up with something already built, not a cold pitch. The work does the talking." }
+];
+
+const WORK_TITLE = "A handful of what's shipped";
+const WORK_SUB = "Not the full list, just what's easiest to point at right now.";
+
+// status: "live" | "deployed" | "archived"
+// category: used for the filter buttons — keep short, reuse across entries
+//
+// screenshot: leave as null to auto-generate a live thumbnail of the URL
+// (no work needed, updates itself over time but can look rough — loading
+// states, wallet popups, etc). To use your own screenshot instead: take one,
+// drop the image in assets/screenshots/, and set this to that file's path,
+// e.g. "assets/screenshots/sentinel.jpg"
+const PROJECTS = [
+  {
+    title: "Sentinel",
+    category: "AI Agent",
+    status: "live",
+    description: "Checks a wallet or pool for wash-trading and manipulation before you trade, not after. Live wallet connection, OKB and USDC balance reads, Gemini doing the reasoning, real swap quotes on X Layer Mainnet.",
+    tags: ["X Layer", "Gemini AI", "OKX Market API"],
+    url: "https://xlayer-sentinel.vercel.app",
+    screenshot: null
+  },
+  {
+    title: "Flare Terminal",
+    category: "Dashboard",
+    status: "deployed",
+    description: "A dashboard for tracking invoice settlement across chains. Built around a split-flap board animation because a plain table felt dead.",
+    tags: ["Flare", "Cross-chain"],
+    url: "https://flare-terminal.vercel.app",
+    screenshot: null
+  },
+  {
+    title: "The Enclave",
+    category: "dApp",
+    status: "deployed",
+    description: "Confidential compute, dressed up as a declassified file archive.",
+    tags: ["Flare", "Confidential Compute"],
+    url: "https://enclave-neon.vercel.app",
+    screenshot: null
+  },
+  {
+    title: "Garden Simulator",
+    category: "Dashboard",
+    status: "deployed",
+    description: "A garden sim running on real CoinGecko price data, plus a reward calculator.",
+    tags: ["CoinGecko API", "Simulation"],
+    url: "https://blok-capital-garden.vercel.app",
+    screenshot: null
+  },
+  {
+    title: "Mantle RWA Scout",
+    category: "dApp",
+    status: "archived",
+    description: "A React app for scouting real-world-asset opportunities on Mantle, paired with a research write-up.",
+    tags: ["Mantle", "React"],
+    url: "https://mantle-rwa-scout-37ix.vercel.app",
+    screenshot: null
+  },
+  {
+    title: "Matchday Ledger",
+    category: "Dashboard",
+    status: "deployed",
+    description: "A ledger for tracking odds and match movement during the World Cup.",
+    tags: ["Sports Data"],
+    url: "https://txline-sharp-movement-agent-bakw.vercel.app/",
+    screenshot: null
+  },
+  {
+    title: "CoinStats Partnership",
+    category: "Content",
+    status: "live",
+    description: "Video content for CoinStats. Nothing overproduced, just clear explanations that hold attention.",
+    tags: ["Video", "Client Work"],
+    url: "https://x.com/ferz_erz00",
+    screenshot: null
+  },
+  {
+    title: "GoldRush Advocacy",
+    category: "Content",
+    status: "archived",
+    description: "Threads, dashboards, and guides covering GoldRush's stack — Pipeline API, Streaming API, HIP-3, HIP-4, HyperEVM. Written to teach, not to hype.",
+    tags: ["Covalent", "GoldRush"],
+    url: "https://medium.com/@ferz_00",
+    screenshot: null
+  }
+];
+
+const SOCIALS = [
+  { name: "X (Twitter)", handle: "@ferz_erz00", url: "https://x.com/ferz_erz00" },
+  { name: "GitHub", handle: "ferzerz5-lab", url: "https://github.com/ferzerz5-lab" },
+  { name: "Telegram", handle: "t.me/ferz_erz", url: "https://t.me/ferz_erz" },
+  { name: "Discord", handle: "@ferz", url: "https://discord.com/users/1151913716552581140" },
+  { name: "Medium", handle: "@ferz_00", url: "https://medium.com/@ferz_00" },
+  { name: "Substack", handle: "@ferz0", url: "https://substack.com/@ferz0" }
+];
+
+/* ================================================================
+   END EDIT ZONE
+   ================================================================ */
+
+
+// ---- render: hero ----
+document.getElementById("hero-role").textContent = PROFILE.role;
+document.getElementById("hero-desc").textContent = PROFILE.description;
+document.getElementById("hero-pills").innerHTML = PROFILE.pills.map(p => `<span class="pill">${p}</span>`).join("");
+const xSocial = SOCIALS.find(s => s.name.includes("X"));
+const ghSocial = SOCIALS.find(s => s.name.includes("GitHub"));
+if (xSocial) document.getElementById("hero-x-link").href = xSocial.url;
+if (xSocial) document.getElementById("more-x").href = xSocial.url;
+if (ghSocial) document.getElementById("more-gh").href = ghSocial.url;
+
+// ---- render: ticker ----
+const tickerItems = PROJECTS.map(p => `<div class="ticker-item"><span class="tag">[${p.status.toUpperCase()}]</span> ${p.title}</div>`).join("");
+document.getElementById("ticker-track").innerHTML = tickerItems + tickerItems;
+
+// ---- render: what i do ----
+document.getElementById("do-sub").textContent = DO_SUB;
+document.getElementById("do-list").innerHTML = DO_ITEMS.map((d, i) => `
+  <div class="do-item">
+    <div class="do-num">${String(i+1).padStart(2,"0")}</div>
+    <div>
+      <div class="do-title">${d.title}</div>
+      <div class="do-text">${d.text}</div>
+    </div>
+  </div>
+`).join("");
+
+// ---- render: proof of work ----
+document.getElementById("work-title").textContent = WORK_TITLE;
+document.getElementById("work-sub").textContent = WORK_SUB;
+
+const categories = ["All", ...new Set(PROJECTS.map(p => p.category))];
+const filtersEl = document.getElementById("filters");
+const gridEl = document.getElementById("project-grid");
+
+function autoScreenshotUrl(url){
+  return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=800&h=500`;
+}
+
+function renderProjects(filter){
+  const list = filter === "All" ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+  gridEl.innerHTML = list.map(p => {
+    const thumbSrc = p.screenshot || autoScreenshotUrl(p.url);
+    return `
+    <a class="card notched" href="${p.url}" target="_blank" rel="noopener">
+      <div class="card-thumb">
+        <span class="stamp ${p.status}">${p.status}</span>
+        <img src="${thumbSrc}" alt="${p.title} screenshot" loading="lazy">
+        <span class="visit-hint">↗ Visit ${new URL(p.url).hostname}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.description}</div>
+        <div class="card-tags">${p.tags.map(t => `<span class="tag-chip">${t}</span>`).join("")}</div>
+        <span class="card-link">View project →</span>
+      </div>
+    </a>
+  `;
+  }).join("");
+}
+
+filtersEl.innerHTML = categories.map((c, i) => `<button class="filter-btn notched-sm notched ${i===0 ? "active" : ""}" data-cat="${c}">${c}</button>`).join("");
+filtersEl.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    filtersEl.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderProjects(btn.dataset.cat);
+  });
+});
+renderProjects("All");
+
+// ---- render: connect ----
+document.getElementById("connect-grid").innerHTML = SOCIALS.map(s => `
+  <a class="social-link" href="${s.url}" target="_blank" rel="noopener">
+    <span>
+      <div class="social-name">${s.name}</div>
+      <div class="social-handle">${s.handle}</div>
+    </span>
+    <span class="social-arrow">→</span>
+  </a>
+`).join("");
+
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
